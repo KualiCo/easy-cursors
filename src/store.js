@@ -5,6 +5,8 @@ const moment = require('moment')
 export const Entries = GLOBAL_ENTRY_DATA
 export const EntriesWeeks = groupedWeeks(Entries)
 
+export var dateFormat = "YYYY-MM-DD"
+
 export function groupedWeeks(entries) {
   return groupBy(entries, compose(formatDate, weekStartSunday, entryDate))
 }
@@ -18,10 +20,15 @@ export function lastWeekOfMonth(date) {
 }
 
 export function weeksBack(start, n) {
-  return range(0, n).reduce(function(weeks, x) {
-    var nextDate = formatDate(moment(start).subtract(x * 7, 'days'))
-    return weeks.concat([nextDate])
-  }, [])
+  return range(0, n).map(function(x) {
+    return moment(start).subtract(x * 7, 'days')
+  })
+}
+
+export function weekDates(date) {
+  return range(0, 7).map(function(x) {
+    return moment(date).add(x, 'days')
+  })
 }
 
 // make it a moment or clone it
@@ -43,26 +50,12 @@ function weekStartMonday(date) {
   }
 }
 
-function formatDate(dateMoment) {
-  return dateMoment.format("YYYY-MM-DD") 
+export function formatDate(dateMoment, format = dateFormat) {
+  return dateMoment.format(format)
 }
 
-//function weeksBetween(start, end, startOfWeek) {
-  //// returns all the moments for the weeks between the two dates
-  //// assumes that it starts 
-  //start = startOfWeek(start)
-  //end = startOfWeek(end)
-  //var weeks = []
-
-  //while (start.unix() <= end.unix()) {
-    //weeks.push(start)
-    //start = moment(start).day(8)
-  //}
-
-  //return weeks
-//}
 
 function entryDate(e) { return e.date }
-function lastDayOfMonth(m) { return m.endOf('month') }
+export function lastDayOfMonth(m) { return moment(m).endOf('month') }
 
 
