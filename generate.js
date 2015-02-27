@@ -15,9 +15,8 @@ yaml.safeLoadAll(content, function(doc) {
 
 console.log(" - docs:", docs.length)
 
-var jsonContent = "var ENTRIES = " + JSON.stringify(docs, null, "  ")
+var jsonContent = "var GLOBAL_ENTRY_DATA = " + JSON.stringify(docs, null, "  ")
 fs.writeFileSync(output, jsonContent, 'utf8')
 
 console.log(" - [OK]")
-
 
