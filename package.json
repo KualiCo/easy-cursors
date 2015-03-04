@@ -23,6 +23,7 @@
     "js-yaml": "3.2.7",
     "lodash": "3.3.1",
     "moment": "2.9.0",
+    "ramda": "0.10.0",
     "react": "0.12.2"
   },
   "devDependencies": {
