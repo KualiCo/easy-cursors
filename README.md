@@ -155,7 +155,35 @@ Turn a cursor pointing to an array into an array of cursors pointing to the chil
     })
 
 
+Best Practice
+-------------
 
+##### One cursor per component.
+
+Your component should own one cursor. For example, a `<Person>` component could have a cursor to a person object. If person's have a `.name`, don't mess around with cursors to `.name`. Just unwrap your person object at the top, do whatever you want with it, and call update all at once. 
+
+    render: function() {
+
+      // unwrap the value right away
+      var cursor = this.props.cursor
+      var person = cursor.value
+
+      // don't use cursor.get('name') here, unless you're passing it to another component
+      return <div>{person.name}</div>
+    }
+
+##### Update all at once.
     
-
+Only call `update` or `set value` once. If you need to set multiple properties you can do them all at once with `update`. As soon as you call either, your data is stale and the app refreshes. 
   
+    function onChangeName(e) {
+
+      cursor.update(function(person) {
+        // do whatever you want to manipulate person, just make sure you return the new version
+        person.firstName = e.target.value
+        person.fullName = fullName(person)
+        return person
+      })
+
+      // don't call update again! it has stale data now
+    }
