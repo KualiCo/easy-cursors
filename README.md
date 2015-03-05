@@ -63,13 +63,13 @@ API
 
 ### State
 
-`onUpdate(callback:Function)`
+`onUpdate(callback:Function)` - triggers when any cursor in the state is updated. Useful for calling render.
 
 `offUpdate(callback:Function)`
 
-`cursor():Cursor`
+`cursor():Cursor` - get a cursor pointing to your state
 
-`replace(data:Object)`
+`replace(data:Object)` - replace the data and trigger updates. You don't normally need to call this. Instead, write data to a cursor
 
 ### Cursor
 
