@@ -155,8 +155,8 @@ Turn a cursor pointing to an array into an array of cursors pointing to the chil
     })
 
 
-Best Practice
--------------
+Best Practices
+--------------
 
 ##### One cursor per component.
 
