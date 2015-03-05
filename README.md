@@ -59,7 +59,9 @@ Usage
 API
 ---
 
-`state(data:Object):State`
+##### `state(data:Object):State`
+
+Create a state object with starting data.
 
 ### State
 
@@ -80,15 +82,15 @@ replace the data and trigger updates. You don't normally need to call this. Inst
 ### Cursor
 
 
-`get(key:string):Cursor`
+##### `get(key:string):Cursor`
 
-`value:any`
+##### `value:any`
 
-`update(func:(val:T) => T))`
+##### `update(func:(val:T) => T))`
 
-`delete()`
+##### `delete()`
 
-`toArray():[Cursor]`
+##### `toArray():[Cursor]`
 
 
 
