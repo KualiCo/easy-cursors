@@ -59,25 +59,17 @@ Usage
 API
 ---
 
-##### state
-
 `state(data:Object):State`
 
 Create a state object with starting data.
 
 ### State
 
-##### onUpdate
-
 `onUpdate(callback:Function)` 
 
 triggers when any cursor in the state is updated. Useful for calling render.
 
-##### offUpdate
-
 `offUpdate(callback:Function)`
-
-##### cursor
 
 `cursor():Cursor` 
 
