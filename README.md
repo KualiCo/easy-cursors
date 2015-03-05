@@ -63,7 +63,7 @@ API
 
 ### State
 
-#### `onUpdate(callback:Function)` 
+##### `onUpdate(callback:Function)` 
 
 triggers when any cursor in the state is updated. Useful for calling render.
 
