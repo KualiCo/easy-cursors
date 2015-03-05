@@ -1,3 +1,3 @@
 
-React Experiments
------------------
+Easy Cursors
+------------

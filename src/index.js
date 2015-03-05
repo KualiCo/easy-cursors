@@ -14,7 +14,7 @@ const copy = require("shallow-copy")
   // TODO try to make any cursor act enumerable? naw...
   // cursor.toArray()     turn cursor to an array into array of cursors
 
-export function projectile(data) {
+export function state(data) {
   return new State(data)
 }
 

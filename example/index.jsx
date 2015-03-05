@@ -1,11 +1,11 @@
 const React = window.React = require('react')
 const {map, append, partial, curry, compose} = require('ramda')
 const shortid = require('shortid')
-const {projectile} = require('./projectile')
+const cursors = require('../index')
 
 // STATE --------------------------------------------------------
 
-const state = projectile({
+const state = cursors.state({
   items: [
     {id: 1, name: "one"}, 
     {id: 2, name: "two"}, 
@@ -13,6 +13,7 @@ const state = projectile({
 })
 
 
+// VIEW -------------------------------------------------------
 
 const TodoItem = React.createClass({
   render() {
@@ -71,7 +72,7 @@ const TodoApp = React.createClass({
     }
 
     return <div className="row small-12 columns">
-      <h1>Items</h1>
+      <h1>Demo</h1>
       <button onClick={onAdd}>Add Item</button>
       <TodoList cursor={cursor} />
     </div>

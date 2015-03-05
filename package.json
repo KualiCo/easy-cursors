@@ -2,9 +2,9 @@
   "name": "easy-cursors",
   "version": "0.1.0",
   "description": "Cursors that work with normal objects. Works with React",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
-    "build": "node_modules/.bin/babel "
+    "prepublish": "node_modules/.bin/babel src -d build"
   },
   "repository": {
     "type": "git",
