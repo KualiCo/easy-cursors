@@ -43,9 +43,14 @@ const TodoItem = React.createClass({
     function onChange(e) {
       cursor.update(setName(e.target.value))
 
-      // also works, but would voilate best practice. Don't play with cursors!
-      // write or update the entire cursor you own all at once
-      // item.sub('name').set(e.target.value)
+      // also works, but would voilate best practice. Don't play with inner cursors!
+      // set or update the entire cursor you own all at once
+      // cursor.get('name').value = e.target.value
+    }
+
+    function onDelete() {
+      // should cursors be able to delete themselves?
+      cursor.delete()
     }
 
     // other ways of writing the same thing
@@ -56,6 +61,7 @@ const TodoItem = React.createClass({
 
     return <li>
       <input value={item.name} onChange={onChange}/>
+      <a onClick={onDelete}> Delete</a>
     </li>
   }
 })
@@ -80,7 +86,11 @@ const TodoList = React.createClass({
 const TodoApp = React.createClass({
   render() {
     const cursor = this.props.cursor
-    const onAdd = () => cursor.update(addEmptyItem)
+    const items = cursor.value
+    const onAdd = function() {
+      cursor.update(addItem(emptyItem()))
+    }
+
 
     return <div className="row small-12 columns">
       <h1>Items</h1>
@@ -120,9 +130,6 @@ const addItem = curry(function(item, items) {
 const emptyItem = function() {
   return {id: shortid.generate(), name: ""}
 }
-
-const addEmptyItem = compose(addItem, emptyItem)
-
 
 const setName = curry(function(value, item) {
   item.name = value

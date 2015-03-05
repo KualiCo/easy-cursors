@@ -1,5 +1,6 @@
-const {partial, append, range, curry, compose, map} = require("ramda")
+const {partial, append, range, curry, compose, map, clone, head, init, last, remove, tail} = require("ramda")
 const {EventEmitter} = require("events")
+const copy = require("shallow-copy")
 
 
 // API: CURSOR
@@ -17,14 +18,14 @@ export function projectile(data) {
   return new State(data)
 }
 
-export function cursor(data, keyPath) {
-  return new Cursor(data, keyPath)
+export function cursor(data, keyPath, replace) {
+  return new Cursor(data, keyPath, replace)
 }
 
 export class State {
 
   constructor(data) {
-    this._data = data
+    this.data = data
     this._events = new EventEmitter()
   }
 
@@ -37,20 +38,31 @@ export class State {
   }
 
   cursor() {
-    return new Cursor(this._data)
+    return cursor(this.data, [], this.replace.bind(this))
+  }
+
+  replace(newData) {
+    this.data = newData
+    this._events.emit('update', newData)
   }
 }
 
-
+// they need to know how to replace data
 export class Cursor {
 
-  constructor(data, keyPath = []) {
+  constructor(data, keyPath, replace) {
+
+    if (!data) throw new Error("Cursor missing data")
+    if (!keyPath) throw new Error("Cursor missing keyPath")
+    if (!replace) throw new Error("Cursor missing replace")
+
     this._data = data
     this._keyPath = keyPath
+    this._replace = replace
   }
 
   get(key) {
-    return childCursor(this._data, this._keyPath, key)
+    return childCursor(this, key)
   }
 
   get value() {
@@ -58,16 +70,25 @@ export class Cursor {
   }
 
   set value(val) {
-    return this.update(() => val)
+    this._updateAndReplace(mutateUpdate(() => val))
   }
 
   update(f) {
-    console.log("UPDATE", f)
+    this._updateAndReplace(mutateUpdate(f))
+  }
+
+  delete() {
+    this._updateAndReplace(mutateDelete)
+  }
+
+  _updateAndReplace(mutate) {
+    var data = writeKeyPath(this._keyPath, this._data, mutate)
+    this._replace(data)
   }
 
   toArray() {
     const arrayCursors = compose(
-      map(childCursor(this._data, this._keyPath)),
+      map(childCursor(this)),
       indices
     )
     return arrayCursors(this.value)
@@ -78,12 +99,11 @@ export class Cursor {
 
 export const value = function(cursor) {
   //console.log("VALUE", cursor)
-  return read(cursor._keyPath, cursor._data)
+  return readKeyPath(cursor._keyPath, cursor._data)
 }
 
-export const childCursor = curry(function(data, keyPath, key) {
-  //console.log("childCursor", data, keyPath, key)
-  return cursor(data, childKeyPath(key, keyPath))
+export const childCursor = curry(function(parent, key) {
+  return cursor(parent._data, childKeyPath(key, parent._keyPath), parent._replace)
 })
 
 function indices(arr) {
@@ -94,16 +114,60 @@ function childKeyPath(key, parentKeyPath = []) {
   return append(key, parentKeyPath)
 }
 
-function read(keyPath, data) {
-  //console.log("READ", data, keyPath)
+function readKeyPath(keyPath, data) {
   if (!keyPath) return data
 
-  var asdf = keyPath.reduce(function(val, key) {
-    //console.log("get", key, val, val && val[key])
+  var value = keyPath.reduce(function(val, key) {
     return val && val[key]
   }, data)
 
-  //console.log("ASDF", asdf)
-
-  return asdf
+  return value
 }
+
+// create a copy of data with the value changed at the key path
+function writeKeyPath(keyPath, data, mutate) {
+  const key = head(keyPath)
+  const nextKeys = tail(keyPath)
+  var parent = copy(data)
+
+  if (!nextKeys.length) {
+    // time to do the mutation! we're on the last one
+    parent = mutate(parent, key)
+  }
+
+  else {
+    // drill in and update the child
+    var child = parent[key] || emptyChild(key)
+    parent[key] = writeKeyPath(nextKeys, child, mutate)
+  }
+
+  return parent
+}
+
+function emptyChild(key) {
+  if (key > -1) {
+    return []
+  }
+  else {
+    return {}
+  }
+}
+
+const mutateUpdate = curry(function(f, parent, key) {
+  parent[key] = f(parent[key])
+  return parent
+})
+
+const mutateDelete = function(parent, key) {
+
+  if (Array.isArray(parent)) {
+    parent.splice(key, 1)
+  }
+
+  else {
+    delete parent[key]
+  }
+
+  return parent
+}
+
