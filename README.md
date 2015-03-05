@@ -67,30 +67,66 @@ Create a state object with starting data.
 
 ##### `onUpdate(callback:Function)` 
 
-triggers when any cursor in the state is updated. Useful for calling render.
+Triggers when any cursor in the state is updated. Useful for calling render.
 
 ##### `offUpdate(callback:Function)`
 
 ##### `cursor():Cursor` 
 
-get a cursor pointing to your state
+Get a cursor pointing to your state
 
 ##### `replace(data:Object)` 
 
-replace the data and trigger updates. You don't normally need to call this. Instead, write data to a cursor
+Replace the data and trigger updates. You don't normally need to call this. Instead, write data to a cursor
 
 ### Cursor
 
-
 ##### `get(key:string):Cursor`
 
-##### `value:any`
+Returns a cursor pointing to a child property
+
+##### `value:any` Property
+
+Render the value of a cursor:
+
+    var cursor = this.props.cursor
+    var person = cursor.value
+    return <div>Name: {person.name}</div>
+
+Set the value of a cursor:
+
+    function onChange(e) {
+      cursor.value = {name: e.target.value}
+    }
 
 ##### `update(func:(val:T) => T))`
 
+Set the value of a cursor with a pure updating function. The function will be passed the current value of the cursor and should return the new value.
+
+    function onChange(e) {
+      cursor.update(function(person) {
+        var newPerson = copy(person)
+        newPerson = e.target.value
+        return newPerson
+      })
+    }
+
 ##### `delete()`
 
+Delete the cursor from its parent. Works on arrays and objects. 
+
+    function onDelete() {
+      cursor.delete()
+    }
+
 ##### `toArray():[Cursor]`
+
+Turn a cursor pointing to an array into an array of cursors pointing to the children
+
+    var content = itemsCursor.toArray().map(function(cursor) {
+      var item = cursor.value
+      return <TodoItem cursor={cursor} key={item.id} />
+    })
 
 
 
