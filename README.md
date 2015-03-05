@@ -32,8 +32,8 @@ Usage
         var cursor = this.props.cursor
         var message = cursor.value
 
-        // you can set the value of your cursor
-        // which will cause onUpdate to trigger
+        // change the value of your cursor, which will cause onUpdate to trigger
+        // then App.render gets called with a fresh cursor
         function onChange(e) {
           cursor.value = e.target.value
         }
