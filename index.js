@@ -47,7 +47,6 @@ export class State {
   }
 }
 
-// they need to know how to replace data
 export class Cursor {
 
   constructor(data, keyPath, replace) {

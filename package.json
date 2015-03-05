@@ -1,36 +1,31 @@
 {
-  "name": "hindsight-prototype",
-  "version": "1.0.0",
-  "description": "",
+  "name": "easy-cursors",
+  "version": "0.1.0",
+  "description": "Cursors that work with normal objects. Works with React",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel generate.js > ./build/generate.js ",
-    "generate": "npm run build && node build/generate.js data/data.yml ./build/data.js"
+    "build": "node_modules/.bin/babel "
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seanhess/hindsight-prototype.git"
+    "url": "https://github.com/KualiCo/easy-cursors.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Sean Hess",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/seanhess/hindsight-prototype/issues"
+    "url": "https://github.com/KualiCo/easy-cursors/issues"
   },
-  "homepage": "https://github.com/seanhess/hindsight-prototype",
+  "homepage": "https://github.com/KualiCo/easy-cursors",
   "dependencies": {
-    "axios": "0.5.0",
-    "moment": "2.9.0",
     "ramda": "0.10.0",
-    "react": "0.12.2",
-    "shallow-copy": "0.0.1",
-    "shortid": "2.1.3"
+    "shallow-copy": "0.0.1"
   },
   "devDependencies": {
+    "babel": "4.6.6",
     "babel-core": "4.5.1",
     "babel-loader": "4.0.0",
     "jsx-loader": "0.12.2",
-    "webpack": "1.6.0",
-    "webpack-dev-server": "1.7.0"
+    "shortid": "2.1.3",
+    "webpack": "1.6.0"
   }
 }
