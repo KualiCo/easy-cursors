@@ -3,14 +3,7 @@ const {map, append, partial, curry, compose} = require('ramda')
 const shortid = require('shortid')
 const {projectile} = require('./projectile')
 
-//console.log("WOOO", projectile)
-
-
 // STATE --------------------------------------------------------
-
-// returns a state object, and automatically creates sub-cursors
-// state.sub('items') = cursor to items
-// state.sub('items').sub(0) = cursor to items[0]. 
 
 const state = projectile({
   items: [
@@ -19,18 +12,6 @@ const state = projectile({
     {id: 3, name: "three"}],
 })
 
-
-// state.cursor() returns current cursor
-
-// API: CURSOR
-  // cursor.value = x
-  // cursor.value
-  // cursor.update(func)  update value
-
-  // cursor.get(key)      child cursor
-  // cursor.get(keyPath)  child cursor
-
-  // cursor.toArray()     turn cursor to an array into array of cursors
 
 
 const TodoItem = React.createClass({
@@ -49,7 +30,7 @@ const TodoItem = React.createClass({
     }
 
     function onDelete() {
-      // should cursors be able to delete themselves?
+      // cursors can delete themselves!
       cursor.delete()
     }
 
@@ -70,13 +51,11 @@ const TodoList = React.createClass({
   render() {
     const cursor = this.props.cursor
 
-    // hmm, now this is challening
     const renderItem = function(cursor) {
       return <TodoItem cursor={cursor} key={cursor.value.id}/>
     }
 
-    // can I make any cursor ACT like an array instead?
-    // I should try
+    // call .toArray() to convert Cursor<[]> to [Cursor]
     return <ul>
       {map(renderItem, cursor.toArray())}
     </ul>
@@ -90,7 +69,6 @@ const TodoApp = React.createClass({
     const onAdd = function() {
       cursor.update(addItem(emptyItem()))
     }
-
 
     return <div className="row small-12 columns">
       <h1>Items</h1>
