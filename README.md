@@ -158,9 +158,9 @@ Turn a cursor pointing to an array into an array of cursors pointing to the chil
 Best Practices
 --------------
 
-##### One cursor per component.
+##### One cursor per component. Unwrap your cursor early
 
-Your component should own one cursor. For example, a `<Person>` component could have a cursor to a person object. If person's have a `.name`, don't mess around with cursors to `.name`. Just unwrap your person object at the top, do whatever you want with it, and call update all at once. 
+Your component should own one cursor. For example, a `<Person>` component could have a cursor to a person object. If person's have a `.name`, don't mess around with cursors to `.name`. Just unwrap your person object at the top, and stick with normal data objects everywhere.
 
     render: function() {
 
