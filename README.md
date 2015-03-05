@@ -59,23 +59,33 @@ Usage
 API
 ---
 
-##### `state(data:Object):State`
+##### state
+
+`state(data:Object):State`
 
 Create a state object with starting data.
 
 ### State
 
-##### `onUpdate(callback:Function)` 
+##### onUpdate
+
+`onUpdate(callback:Function)` 
 
 triggers when any cursor in the state is updated. Useful for calling render.
 
-##### `offUpdate(callback:Function)`
+##### offUpdate
 
-##### `cursor():Cursor` 
+`offUpdate(callback:Function)`
+
+##### cursor
+
+`cursor():Cursor` 
 
 get a cursor pointing to your state
 
-##### `replace(data:Object)` 
+##### replace
+
+`replace(data:Object)` 
 
 replace the data and trigger updates. You don't normally need to call this. Instead, write data to a cursor
 
