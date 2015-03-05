@@ -63,17 +63,36 @@ API
 
 Create a state object with starting data.
 
+    var cursors = require('easy-cursors')
+
+    var state = cursors.state({
+      people: [{name: "bob"}]
+    })
+
 ### State
 
 ##### `onUpdate(callback:Function)` 
 
 Triggers when any cursor in the state is updated. Useful for calling render.
 
+    state.onUpdate(render)
+
 ##### `offUpdate(callback:Function)`
+
+Remove the listener
+
+    state.offUpdate(render)
 
 ##### `cursor():Cursor` 
 
-Get a cursor pointing to your state
+Get a cursor pointing to your state. To point to properties of your state, see `.get` below.
+
+    function render() {
+      React.render(
+        <App cursor={state.cursor()} />
+        document.getElementById('content')
+      )
+    }
 
 ##### `replace(data:Object)` 
 
@@ -84,6 +103,13 @@ Replace the data and trigger updates. You don't normally need to call this. Inst
 ##### `get(key:string):Cursor`
 
 Returns a cursor pointing to a child property
+
+    render: function() {
+      var cursor = this.props.cursor
+      return <div>
+        <People cursor={cursor.get('people'} />
+      </div>
+    }
 
 ##### `value:any` Property
 
