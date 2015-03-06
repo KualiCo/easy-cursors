@@ -1,5 +1,3 @@
-/* @flow */
-
 const React = window.React = require('react')
 const {map, append, partial, curry, compose} = require('ramda')
 const shortid = require('shortid')
