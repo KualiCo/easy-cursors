@@ -75,6 +75,7 @@ const TodoApp = React.createClass({
       <h1>Demo</h1>
       <button onClick={onAdd}>Add Item</button>
       <TodoList cursor={cursor} />
+      <div><pre>{JSON.stringify(items, null, " ")}</pre></div>
     </div>
   }
 })

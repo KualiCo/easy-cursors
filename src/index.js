@@ -106,7 +106,8 @@ export const childCursor = curry(function(parent, key) {
 })
 
 function indices(arr) {
-  return range(0, arr.length)
+  var length = (arr) ? arr.length : 0
+  return range(0, length)
 }
 
 function childKeyPath(key, parentKeyPath = []) {
