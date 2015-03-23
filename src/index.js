@@ -137,20 +137,11 @@ function writeKeyPath(keyPath, data, mutate) {
 
   else {
     // drill in and update the child
-    var child = parent[key] || emptyChild(key)
+    var child = parent[key] || {}
     parent[key] = writeKeyPath(nextKeys, child, mutate)
   }
 
   return parent
-}
-
-function emptyChild(key) {
-  if (key > -1) {
-    return []
-  }
-  else {
-    return {}
-  }
 }
 
 const mutateUpdate = curry(function(f, parent, key) {
