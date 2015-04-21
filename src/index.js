@@ -71,8 +71,8 @@ export class Cursor {
   }
 
   changedInLastUpdate() {
-    var myPath = this._keyPath.join('.')
-    var changedPath = this._getLastChangedKeyPath().join('.')
+    var myPath = this._keyPath
+    var changedPath = this._getLastChangedKeyPath()
     return compareArrays(changedPath, myPath)
   }
 
