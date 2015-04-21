@@ -20,8 +20,8 @@ export function state(data) {
   return new State(data)
 }
 
-export function cursor(data, keyPath, replace, getLastChanged) {
-  return new Cursor(data, keyPath, replace, getLastChanged)
+export function cursor(data, keyPath, replace, getLastChangedKeyPath) {
+  return new Cursor(data, keyPath, replace, getLastChangedKeyPath)
 }
 
 export class State {
@@ -41,7 +41,7 @@ export class State {
   }
 
   cursor() {
-    return cursor(this.data, [], this.replace.bind(this), this.getLastChanged.bind(this))
+    return cursor(this.data, [], this.replace.bind(this), this.getLastChangedKeyPath.bind(this))
   }
 
   replace(newData, keyPath) {
@@ -50,30 +50,30 @@ export class State {
     this._events.emit('update', newData)
   }
 
-  getLastChanged() {
+  getLastChangedKeyPath() {
     return this.lastChangedKeyPath
   }
 }
 
 export class Cursor {
 
-  constructor(data, keyPath, replace, getLastChanged) {
+  constructor(data, keyPath, replace, getLastChangedKeyPath) {
 
     if (!data) throw new Error("Cursor missing data")
     if (!keyPath) throw new Error("Cursor missing keyPath")
     if (!replace) throw new Error("Cursor missing replace")
-    if (!getLastChanged) throw new Error("Cursor missing getLastChanged")
+    if (!getLastChangedKeyPath) throw new Error("Cursor missing getLastChangedKeyPath")
 
     this._data = data
     this._keyPath = keyPath
     this._replace = replace
-    this._getLastChanged = getLastChanged
+    this._getLastChangedKeyPath = getLastChangedKeyPath
   }
 
   changedInLastUpdate() {
     var myPath = this._keyPath.join('.')
-    var changedPath = this._getLastChanged().join('.')
-    return changedPath.indexOf(myPath) == 0 || myPath.indexOf(changedPath) == 0
+    var changedPath = this._getLastChangedKeyPath().join('.')
+    return compareArrays(changedPath, myPath)
   }
 
   get(key) {
@@ -118,7 +118,7 @@ export const value = function(cursor) {
 }
 
 export const childCursor = curry(function(parent, key) {
-  return cursor(parent._data, childKeyPath(key, parent._keyPath), parent._replace, parent._getLastChanged)
+  return cursor(parent._data, childKeyPath(key, parent._keyPath), parent._replace, parent._getLastChangedKeyPath)
 })
 
 function indices(arr) {
@@ -176,4 +176,12 @@ const mutateDelete = function(parent, key) {
   }
 
   return parent
+}
+
+// should return true if one array is a subset of the other
+var compareArrays = exports.compareArrays = function (arr, arr2) {
+  return arr.reduce((memo, val, i) => {
+    if (arr2[i] != val && arr2.length > i) return false
+    return memo
+  }, true)
 }
