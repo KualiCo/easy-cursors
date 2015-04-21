@@ -11,6 +11,8 @@ const copy = require("shallow-copy")
   // cursor.get(key)      child cursor
   // cursor.get(keyPath)  child cursor
 
+  // cursor.changedInLastUpdate()  boolean
+
   // TODO try to make any cursor act enumerable? naw...
   // cursor.toArray()     turn cursor to an array into array of cursors
 
@@ -18,8 +20,8 @@ export function state(data) {
   return new State(data)
 }
 
-export function cursor(data, keyPath, replace) {
-  return new Cursor(data, keyPath, replace)
+export function cursor(data, keyPath, replace, getLastChangedKeyPath) {
+  return new Cursor(data, keyPath, replace, getLastChangedKeyPath)
 }
 
 export class State {
@@ -27,6 +29,7 @@ export class State {
   constructor(data) {
     this.data = data
     this._events = new EventEmitter()
+    this.lastChangedKeyPath = []
   }
 
   onUpdate(f) {
@@ -38,26 +41,39 @@ export class State {
   }
 
   cursor() {
-    return cursor(this.data, [], this.replace.bind(this))
+    return cursor(this.data, [], this.replace.bind(this), this.getLastChangedKeyPath.bind(this))
   }
 
-  replace(newData) {
+  replace(newData, keyPath) {
+    this.lastChangedKeyPath = keyPath
     this.data = newData
     this._events.emit('update', newData)
+  }
+
+  getLastChangedKeyPath() {
+    return this.lastChangedKeyPath
   }
 }
 
 export class Cursor {
 
-  constructor(data, keyPath, replace) {
+  constructor(data, keyPath, replace, getLastChangedKeyPath) {
 
     if (!data) throw new Error("Cursor missing data")
     if (!keyPath) throw new Error("Cursor missing keyPath")
     if (!replace) throw new Error("Cursor missing replace")
+    if (!getLastChangedKeyPath) throw new Error("Cursor missing getLastChangedKeyPath")
 
     this._data = data
     this._keyPath = keyPath
     this._replace = replace
+    this._getLastChangedKeyPath = getLastChangedKeyPath
+  }
+
+  changedInLastUpdate() {
+    var myPath = this._keyPath.join('.')
+    var changedPath = this._getLastChangedKeyPath().join('.')
+    return compareArrays(changedPath, myPath)
   }
 
   get(key) {
@@ -82,7 +98,7 @@ export class Cursor {
 
   _updateAndReplace(mutate) {
     var data = writeKeyPath(this._keyPath, this._data, mutate)
-    this._replace(data)
+    this._replace(data, this._keyPath)
   }
 
   toArray() {
@@ -102,7 +118,7 @@ export const value = function(cursor) {
 }
 
 export const childCursor = curry(function(parent, key) {
-  return cursor(parent._data, childKeyPath(key, parent._keyPath), parent._replace)
+  return cursor(parent._data, childKeyPath(key, parent._keyPath), parent._replace, parent._getLastChangedKeyPath)
 })
 
 function indices(arr) {
@@ -128,7 +144,7 @@ function readKeyPath(keyPath, data) {
 function writeKeyPath(keyPath, data, mutate) {
   const key = head(keyPath)
   const nextKeys = tail(keyPath)
-  var parent = copy(data)
+  var parent = data
 
   if (!nextKeys.length) {
     // time to do the mutation! we're on the last one
@@ -162,3 +178,10 @@ const mutateDelete = function(parent, key) {
   return parent
 }
 
+// should return true if one array is a subset of the other
+var compareArrays = exports.compareArrays = function (arr, arr2) {
+  return arr.reduce((memo, val, i) => {
+    if (arr2[i] != val && arr2.length > i) return false
+    return memo
+  }, true)
+}

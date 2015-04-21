@@ -1,9 +1,10 @@
 {
   "name": "easy-cursors",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Cursors that work with normal objects. Works with React",
   "main": "build/index.js",
   "scripts": {
+    "test": "babel-node test/compare-arrays.js",
     "prepublish": "node_modules/.bin/babel src -d build"
   },
   "repository": {

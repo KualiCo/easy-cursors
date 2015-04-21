@@ -2,9 +2,9 @@
 Easy Cursors
 ------------
 
-Use cursors without dealing with Immutable-JS. easy-cursors defines a simple cursor API for use with normal objects. Designed to use with React. 
+Use cursors without dealing with Immutable-JS. easy-cursors defines a simple cursor API for use with normal objects. Designed to use with React.
 
-_What are cursors?_ Cursors are like an address to some field inside a big data structure. By passing a cursor to a react component, that component can both read and write to the data without having to drill down event handlers. 
+_What are cursors?_ Cursors are like an address to some field inside a big data structure. By passing a cursor to a react component, that component can both read and write to the data without having to drill down event handlers.
 
 
 Installation
@@ -15,7 +15,7 @@ Installation
 Example
 -------
 
-See [index.jsx](./example/index.jsx) in the example directory. 
+See [index.jsx](./example/index.jsx) in the example directory.
 
 Usage
 -----
@@ -71,7 +71,7 @@ Create a state object with starting data.
 
 ### State
 
-##### `onUpdate(callback:Function)` 
+##### `onUpdate(callback:Function)`
 
 Triggers when any cursor in the state is updated. Useful for calling render.
 
@@ -83,7 +83,7 @@ Remove the listener
 
     state.offUpdate(render)
 
-##### `cursor():Cursor` 
+##### `cursor():Cursor`
 
 Get a cursor pointing to your state. To point to properties of your state, see `.get` below.
 
@@ -94,7 +94,7 @@ Get a cursor pointing to your state. To point to properties of your state, see `
       )
     }
 
-##### `replace(data:Object)` 
+##### `replace(data:Object)`
 
 Replace the data and trigger updates. You don't normally need to call this. Instead, write data to a cursor
 
@@ -139,10 +139,18 @@ Set the value of a cursor with a pure updating function. The function will be pa
 
 ##### `delete()`
 
-Delete the cursor from its parent. Works on arrays and objects. 
+Delete the cursor from its parent. Works on arrays and objects.
 
     function onDelete() {
       cursor.delete()
+    }
+
+##### `changedInLastUpdate():boolean`
+
+Tells you whether or not your cursor's keyPath was updated. Useful for creating efficient shouldComponentUpdate functions.
+
+    shouldComponentUpdate(nextProps) {
+      return nextProps.cursor.changedInLastUpdate()
     }
 
 ##### `toArray():[Cursor]`
@@ -173,9 +181,9 @@ Your component should own one cursor. For example, a `<Person>` component could 
     }
 
 ##### Update all at once.
-    
-Only call `update` or `set value` once. If you need to set multiple properties you can do them all at once with `update`. As soon as you call either, your data is stale and the app refreshes. 
-  
+
+Only call `update` or `set value` once. If you need to set multiple properties you can do them all at once with `update`. As soon as you call either, your data is stale and the app refreshes.
+
     function onChangeName(e) {
 
       cursor.update(function(person) {
