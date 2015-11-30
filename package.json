@@ -18,8 +18,7 @@
   },
   "homepage": "https://github.com/KualiCo/easy-cursors",
   "dependencies": {
-    "ramda": "0.10.0",
-    "shallow-copy": "0.0.1"
+    "ramda": "0.10.0"
   },
   "devDependencies": {
     "babel": "4.6.6",

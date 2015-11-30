@@ -1,6 +1,5 @@
-const {append, range, curry, compose, map, head, tail, identity} = require("ramda")
+const {append, range, curry, compose, map, head, tail} = require("ramda")
 const {EventEmitter} = require("events")
-const copy = require("shallow-copy")
 
 
 // API: CURSOR
