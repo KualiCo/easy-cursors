@@ -1,4 +1,4 @@
-const {partial, append, range, curry, compose, map, clone, head, init, last, remove, tail} = require("ramda")
+const {append, range, curry, compose, map, head, tail, identity} = require("ramda")
 const {EventEmitter} = require("events")
 const copy = require("shallow-copy")
 
@@ -13,7 +13,6 @@ const copy = require("shallow-copy")
 
   // cursor.changedInLastUpdate()  boolean
 
-  // TODO try to make any cursor act enumerable? naw...
   // cursor.toArray()     turn cursor to an array into array of cursors
 
 export function state(data) {
@@ -30,6 +29,9 @@ export class State {
     this.data = data
     this._events = new EventEmitter()
     this.lastChangedKeyPath = []
+    this._willUpdate = function(newData, keyPath) {
+      return newData
+    }
   }
 
   onUpdate(f) {
@@ -40,11 +42,16 @@ export class State {
     this._events.off('update', f)
   }
 
+  willUpdate(f) {
+    this._willUpdate = f
+  }
+
   cursor() {
     return cursor(this.data, [], this.replace.bind(this), this.getLastChangedKeyPath.bind(this))
   }
 
   replace(newData, keyPath) {
+    newData = this._willUpdate(newData, keyPath)
     this.lastChangedKeyPath = keyPath
     this.data = newData
     this._events.emit('update', newData)
@@ -110,10 +117,7 @@ export class Cursor {
   }
 }
 
-//const toArray = compose(, indices)
-
 export const value = function(cursor) {
-  //console.log("VALUE", cursor)
   return readKeyPath(cursor._keyPath, cursor._data)
 }
 

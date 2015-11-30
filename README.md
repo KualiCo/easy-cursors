@@ -2,9 +2,13 @@
 Easy Cursors
 ------------
 
-Use cursors without dealing with Immutable-JS. easy-cursors defines a simple cursor API for use with normal objects. Designed to use with React.
+Use cursors without dealing with Immutable-JS. easy-cursors defines a simple
+cursor API for use with normal objects. Designed to use with React, but you
+can use it anywhere!
 
-_What are cursors?_ Cursors are like an address to some field inside a big data structure. By passing a cursor to a react component, that component can both read and write to the data without having to drill down event handlers.
+_What are cursors?_ Cursors are like an address to some field inside a big data
+structure. By passing a cursor to a react component, that component can both
+read and write to the data without having to drill down event handlers.
 
 
 Installation
@@ -76,6 +80,22 @@ Create a state object with starting data.
 Triggers when any cursor in the state is updated. Useful for calling render.
 
     state.onUpdate(render)
+
+##### `willUpdate(callback: Function)`
+
+Registers a function to be called just before the state will be updated.
+The function will be called with the new state and the path that changed.
+The state will be updated to be whatever the function returns.
+
+```JavaScript
+state.willUpdate(function(newData, path) {
+  // whenever the `foo` key changes, we also want to change `bar`
+  if (path[0] == 'foo') {
+    newData.bar = newData.foo
+  }
+  return newData
+})
+```
 
 ##### `offUpdate(callback:Function)`
 
