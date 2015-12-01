@@ -11,7 +11,14 @@
     "type": "git",
     "url": "https://github.com/KualiCo/easy-cursors.git"
   },
+  "engines": {
+    "node": ">=0.10"
+  },
   "author": "Sean Hess",
+  "contributors": [
+    "Jamison Dance <hi@jamison.dance> (http://jamison.dance)",
+    "Dallin Osmun"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/KualiCo/easy-cursors/issues"
