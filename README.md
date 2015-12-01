@@ -1,4 +1,4 @@
-
+[![Build Status](https://travis-ci.org/kualico/easy-cursors.svg?branch=master)](https://travis-ci.org/kualico/easy-cursors)
 Easy Cursors
 ------------
 
