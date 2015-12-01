@@ -1,5 +1,4 @@
 var assert = require('assert')
-
 var cursors = require('../src')
 
 var path = ['foo', 'bar', 'baz']
@@ -19,24 +18,18 @@ var tests = [
   { result: false, path: ['foobarbaz'] },
 ]
 
-console.log(' - Paths should only match if one array is a subset of the other')
-try {
-  for (var i = 0; i < tests.length; ++i) {
-    var test = tests[i]
-    assert(cursors.compareArrays(path, test.path) == test.result, i)
-  }
-} catch (e) {
-  throw Error('Failed on test ' + e.message)
-}
+describe('cursors', function() {
+  describe('.compareArrays', function() {
+    it('only matches paths if one array is a subset of the other', function() {
+      tests.forEach(t => {
+        assert(cursors.compareArrays(path, t.path) == t.result, t)
+      })
+    })
 
-console.log(' - compareArrays should also work if parameters are reversed')
-try {
-  for (var i = 0; i < tests.length; ++i) {
-    var test = tests[i]
-    assert(cursors.compareArrays(test.path, path) == test.result, i)
-  }
-} catch (e) {
-  throw Error('Failed on test ' + e.message)
-}
-
-console.log('Success!!')
+    it('works if parameters are reversed', function() {
+      tests.forEach(t => {
+        assert(cursors.compareArrays(t.path, path) == t.result, t)
+      })
+    })
+  })
+})
