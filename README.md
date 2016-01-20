@@ -131,6 +131,27 @@ Returns a cursor pointing to a child property
       </div>
     }
 
+##### `getPath(keyPath:string | Array<string>):Cursor`
+
+Returns a cursor pointing to a child property, addressable by a
+dot-separated path string, or an array of strings.
+
+    render: function() {
+      var cursor = this.props.cursor
+      return <div>
+        <Name cursor={cursor.get('person.name')} />
+      </div>
+    }
+
+or
+
+    render: function() {
+      var cursor = this.props.cursor
+      return <div>
+        <Name cursor={cursor.get(['person', 'name'])} />
+      </div>
+    }
+
 ##### `value:any` Property
 
 Render the value of a cursor:

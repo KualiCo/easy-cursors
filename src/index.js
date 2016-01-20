@@ -1,4 +1,5 @@
-const {append, range, curry, compose, map, head, tail} = require("ramda")
+const {append, range, curry, compose, map, head, tail,
+  isArrayLike, reduce} = require("ramda")
 const {EventEmitter} = require("events")
 
 
@@ -84,6 +85,13 @@ export class Cursor {
 
   get(key) {
     return childCursor(this, key)
+  }
+
+  getPath(path) {
+    var keys = isArrayLike(path) ? path : path.split('.')
+    return reduce(function(memo, key) {
+      return childCursor(memo, key)
+    }, this, keys)
   }
 
   get value() {
