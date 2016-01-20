@@ -1,6 +1,6 @@
 {
   "name": "easy-cursors",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Cursors that work with normal objects. Works with React",
   "main": "build/index.js",
   "scripts": {
