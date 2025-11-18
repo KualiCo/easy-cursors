@@ -1,3 +1,4 @@
+/* Copyright © 2015-2025 Kuali, Inc. - All Rights Reserved */
 import assert from 'assert'
 
 import * as cursors from '../src/index'

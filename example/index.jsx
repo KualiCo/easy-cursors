@@ -1,3 +1,4 @@
+/* Copyright © 2015-2025 Kuali, Inc. - All Rights Reserved */
 const React = window.React = require('react')
 const {map, append, partial, curry, compose} = require('ramda')
 const shortid = require('shortid')
