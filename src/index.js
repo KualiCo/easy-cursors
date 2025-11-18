@@ -1,3 +1,4 @@
+/* Copyright © 2015-2025 Kuali, Inc. - All Rights Reserved */
 const {append, range, curry, compose, map, head, tail,
   isArrayLike, reduce} = require("ramda")
 const {EventEmitter} = require("events")

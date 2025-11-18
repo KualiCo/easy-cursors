@@ -1,3 +1,4 @@
+/* Copyright © 2015-2025 Kuali, Inc. - All Rights Reserved */
 var assert = require('assert')
 var cursors = require('../src')
 
